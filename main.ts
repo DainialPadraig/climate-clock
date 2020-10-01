@@ -60,6 +60,30 @@ function getCurrentMinutes () {
 }
 function calculateCurrentBudget () {
     current_budget = START_BUDGET
+    years_since_start = current_year - START_YEAR
+    days_since_start = years_since_start * 365
+    days_since_start += Math.trunc(years_since_start / 4)
+    days_per_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    if (current_month > 2) {
+        for (let index = 0; index <= current_month - 2; index++) {
+            days_since_start += days_per_month[index]
+        }
+    } else {
+        if (current_month == 2) {
+            days_since_start += days_per_month[0]
+        }
+    }
+    days_since_start += current_date - 1
+    hours_since_start = days_since_start * 24
+    hours_since_start += current_hour
+    hours_since_start += -7
+    minutes_since_start = hours_since_start * 60
+    minutes_since_start += current_minutes
+    seconds_since_start = minutes_since_start * 60
+    if (seconds_since_start < 0) {
+        seconds_since_start = 0
+    }
+    current_budget += 0 - seconds_since_start * TONS_PER_SECOND
 }
 function getCurrentDate () {
     basic.showString("Enter date (A/B)")
@@ -99,22 +123,28 @@ function getCurrentHour () {
         }
     }
 }
+let seconds_since_start = 0
+let minutes_since_start = 0
 let current_hour = 0
+let hours_since_start = 0
 let current_date = 0
+let days_per_month: number[] = []
+let days_since_start = 0
+let years_since_start = 0
 let current_minutes = 0
 let current_month = 0
 let current_year = 0
 let current_budget = 0
 let START_BUDGET = 0
 let TONS_PER_SECOND = 0
-let START_MONTH = 12
-let START_DATE = 31
-let START_HOURS = 17
+let START_YEAR = 0
+let START_MONTH = 1
+let START_DATE = 1
+START_YEAR = 18
+let START_HOURS = 0
 let START_MINUTES = 0
 TONS_PER_SECOND = 1331
-let TONS_PER_MINUTE = TONS_PER_SECOND * 60
 START_BUDGET = 420000000000
-current_budget = START_BUDGET
 getCurrentMonth()
 getCurrentDate()
 getCurrentYear()
